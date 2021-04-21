@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Index page
+{% endblock %}
+{% block content_title %}
+<p>Index page</p>
+{% endblock %}
+
+{% block content %}
+
+{% for post in posts %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <a href="#">{{ post.name }}</a>
+        <h5 class="card-title">Помогите с квадратным уравнением!!</h5>
+        <p class="card-text">Решите уравнение:<br/> <img src="static/img/math-expression.png"></p>
+        <div class="badge bg-danger text-wrap" style="width: 6rem;">
+            {{ post.price }}
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
+
