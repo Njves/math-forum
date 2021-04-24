@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Задача
+{% endblock %}
+{% block content_title %}
+<p>Создать задачу</p>
+{% endblock %}
+
+
+{% block content %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.body.label }}<br>
+            {{ form.body(cols="40", rows="5") }}
+        </p>
+        <p>
+            {{ form.expression.label }}<br/>
+            {{ form.expression(size=32) }}
+        </p>
+        <p>
+            {{ form.class_level.label }}<br/>
+            {{ form.class_level(size=2) }}
+        </p>
+        <p> {{ form.submit() }} </p>
+    </form>
+{% endblock %}

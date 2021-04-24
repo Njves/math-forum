@@ -24,4 +24,5 @@ class MathTextConverter:
         with open(IMG_PATH + img_name, 'wb') as f:
             image_url.raw.decode_content = True
             shutil.copyfileobj(image_url.raw, f)
+            return IMG_PATH + img_name
 
