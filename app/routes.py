@@ -3,17 +3,19 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app import app
-from app.forms import LoginForm, ProblemForm
+from app.forms import LoginForm, ProblemForm, RegistrationForm
 from app.math_text_converter import MathTextConverter
 from app.models import User, Problem
+from app import db
 
 
 @app.route('/')
 @app.route('/index')
 def index():
     users = User.query.all()
-    print(users)
-    return render_template("index.html", users=users)
+    posts = Problem.query.all()
+    print(posts[-1].image)
+    return render_template("index.html", posts=posts)
 
 
 @app.route('/problem', methods=['GET', 'POST'])
@@ -23,8 +25,9 @@ def problem():
     if form.validate_on_submit():
         image = MathTextConverter.getImage(form.expression.data)
         current_problem = Problem(body=form.body.data, expression=form.expression.data,
-                                  class_level=form.class_level.data, image=image)
-        print(current_problem)
+                                  class_level=form.class_level.data, image=image, author=current_user)
+        db.session.add(current_problem)
+        db.session.commit()
     return render_template('problem.html', form=form)
 
 
@@ -44,8 +47,30 @@ def login():
         return redirect(url_for('index'))
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        user.set_start_tokens_kit()
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/account')
+@login_required
+def account():
+    return render_template('account.html')

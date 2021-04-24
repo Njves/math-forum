@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Мой аккаунт
+{% endblock %}
+
+{% block content_title %}
+Мой аккаунт
+{% endblock %}
+
+{% block content %}
+<p>Имя пользователя: <b>{{ current_user.username }}</b> </p>
+<p>Электронная почта: <b>{{ current_user.email }}</b></p>
+<p>Токены: <b>{{ current_user.tokens }}</b></p>
+<b><a href="{{ url_for('logout') }}">Выйти</a></b>
+{% endblock %}

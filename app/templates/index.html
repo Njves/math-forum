@@ -9,6 +9,11 @@ Index page
 
 {% block content %}
 
+<h1>Hi, {{ current_user.username }}</h1>
+{% for post in posts %}
+    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b> <img src="{{ post.image }}"/></p></div>
+{% endfor %}
+
 {% for user in users %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">

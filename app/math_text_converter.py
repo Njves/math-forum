@@ -6,7 +6,7 @@ import uuid
 
 URL = "https://latex.codecogs.com/png.latex?\dpi{110}&space;\large&space;"
 IMG_PATH = 'app/static/img/'
-
+READABLE_PATH = "static/img/"
 
 class MathTextConverter:
     # Берет сырое мат.выражение прокидывает на сайт и получает картинку
@@ -24,5 +24,6 @@ class MathTextConverter:
         with open(IMG_PATH + img_name, 'wb') as f:
             image_url.raw.decode_content = True
             shutil.copyfileobj(image_url.raw, f)
-            return IMG_PATH + img_name
+            return READABLE_PATH + img_name
 
+   

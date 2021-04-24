@@ -25,6 +25,12 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def set_start_tokens_kit(self):
+        self.tokens = 150
+
+    def set_tokens(self, tokens):
+        self.tokens = tokens
+
     def __repr__(self):
         return 'user: {}, {}'.format(self.username, self.email)
 
@@ -39,4 +45,4 @@ class Problem(db.Model):
     image = db.Column(db.String(128))
 
     def __repr__(self):
-        return f'Problem: body:{self.body}, expression: {self.expression}, class_level={self.class_level}, image: {self.image}'
+        return f'Problem:id: {self.id}, body:{self.body}, expression: {self.expression}, class_level={self.class_level}, image: {self.image}'
