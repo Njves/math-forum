@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Problem', backref='author', lazy='dynamic')
-    tokens = db.Column(db.Integer)
+    tokens = db.Column(db.Integer, default=100)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -32,7 +32,7 @@ class User(db.Model, UserMixin):
         self.tokens = tokens
 
     def __repr__(self):
-        return 'user: {}, {}'.format(self.username, self.email)
+        return 'user: {}, {}, {}'.format(self.username, self.email, self.tokens)
 
 
 class Problem(db.Model):
@@ -41,8 +41,10 @@ class Problem(db.Model):
     expression = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    class_level = db.Column(db.Integer)
+    class_level = db.Column(db.Integer, default=1)
     image = db.Column(db.String(128))
+    section = db.Column(db.String(128), default='Арифметика')
+    value = db.Column(db.Integer, default=100)
 
     def __repr__(self):
         return f'Problem:id: {self.id}, body:{self.body}, expression: {self.expression}, class_level={self.class_level}, image: {self.image}'

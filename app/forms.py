@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, NumberRange, EqualTo, ValidationError, Email
 
 from app.models import User
+from app.section_list import SectionList
 
 
 class LoginForm(FlaskForm):
@@ -34,4 +35,5 @@ class ProblemForm(FlaskForm):
     body = TextAreaField('Описание')
     expression = StringField('Выражение')
     class_level = IntegerField('Класс')
+    sections = SelectField("Тип", choices=SectionList.get_section_list())
     submit = SubmitField('Создать задачу')

@@ -7,6 +7,7 @@ from app.forms import LoginForm, ProblemForm, RegistrationForm
 from app.math_text_converter import MathTextConverter
 from app.models import User, Problem
 from app import db
+from app.token_calc import TokenCalculator
 
 
 @app.route('/')
@@ -14,7 +15,6 @@ from app import db
 def index():
     users = User.query.all()
     posts = Problem.query.all()
-    print(posts[-1].image)
     return render_template("index.html", posts=posts)
 
 
@@ -26,8 +26,18 @@ def problem():
         image = MathTextConverter.getImage(form.expression.data)
         current_problem = Problem(body=form.body.data, expression=form.expression.data,
                                   class_level=form.class_level.data, image=image, author=current_user)
-        db.session.add(current_problem)
-        db.session.commit()
+        current_problem.value = TokenCalculator().calculate_task_value(current_problem)
+        current_problem.section = form.sections.data
+        if current_user.tokens >= current_problem.value:
+            current_user.tokens -= current_problem.value
+            db.session.add(current_problem)
+            db.session.commit()
+            flash(f"Задача успешно создана! Она оценина в {current_problem.value} токенов \nУ вас осталось {current_user.tokens}")
+        else:
+            flash(
+                f"Задача успешно создана! Она оценина в {current_problem.value} токенов"
+                f"\nУ вас осталось {current_user.tokens}")
+
     return render_template('problem.html', form=form)
 
 
@@ -44,7 +54,7 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        return redirect(url_for('index'))
+        return redirect(next_page)
     return render_template('login.html', form=form)
 
 

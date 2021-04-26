@@ -10,18 +10,16 @@ Index page
 {% block content %}
 
 <h1>Hi, {{ current_user.username }}</h1>
-{% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b> <img src="{{ post.image }}"/></p></div>
-{% endfor %}
 
-{% for user in users %}
+
+{% for post in posts %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-        <a href="#">{{ user.username }}</a>
-        <h5 class="card-title">Помогите с квадратным уравнением!!</h5>
-        <p class="card-text">Решите уравнение:<br/> <img src="#"></p>
+        <a href="#">{{ post.author.username }}</a>
+        <h5 class="card-title">{{ post.body }} </h5>
+        <p class="card-text">{{ post.body }}<br/><img src="{{ post.image }}"></p>
         <div class="badge bg-danger text-wrap" style="width: 6rem;">
-            {{ user.email }}
+            {{ post.value }}
         </div>
     </div>
 </div>

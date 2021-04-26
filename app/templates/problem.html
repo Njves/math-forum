@@ -15,13 +15,20 @@
             {{ form.body.label }}<br>
             {{ form.body(cols="40", rows="5") }}
         </p>
+
         <p>
             {{ form.expression.label }}<br/>
-            {{ form.expression(size=32) }}
+            {{ form.expression(size=32) }}<br/>
+        <p><a class="btn btn-outline-dark" href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols" target="_blank">Гайд по оформлению выражений </a></p>
         </p>
+
         <p>
             {{ form.class_level.label }}<br/>
             {{ form.class_level(size=2) }}
+        </p>
+        <p>
+            {{ form.sections.label }}<br/>
+            {{ form.sections() }}
         </p>
         <p> {{ form.submit() }} </p>
     </form>
