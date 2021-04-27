@@ -45,6 +45,7 @@ class Problem(db.Model):
     image = db.Column(db.String(128))
     section = db.Column(db.String(128), default='Арифметика')
     value = db.Column(db.Integer, default=100)
+    solve = db.Column(db.String)
 
     def __repr__(self):
         return f'Problem:id: {self.id}, body:{self.body}, expression: {self.expression}, class_level={self.class_level}, image: {self.image}'

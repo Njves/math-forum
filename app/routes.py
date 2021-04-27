@@ -10,12 +10,22 @@ from app import db
 from app.token_calc import TokenCalculator
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['POST', 'GET'])
+@app.route('/index', methods=['POST', 'GET'])
 def index():
-    users = User.query.all()
     posts = Problem.query.all()
-    return render_template("index.html", posts=posts)
+    if request.method == 'POST':
+        res = request.form
+
+        if res['solve'] == '':
+            return render_template("index.html", posts=posts, posts_len=len(posts))
+        pr = Problem.query.filter_by(id=res['id']).first()
+        pr.solve = res['solve']
+        current_user.tokens += pr.value // 2
+        db.session.add(pr)
+        db.session.commit()
+
+    return render_template("index.html", posts=posts, posts_len=len(posts))
 
 
 @app.route('/problem', methods=['GET', 'POST'])
@@ -23,20 +33,25 @@ def index():
 def problem():
     form = ProblemForm()
     if form.validate_on_submit():
+        if int(form.class_level.data) > 11:
+            flash("Выберите коректный класс")
+            return render_template('problem.html', form=form)
         image = MathTextConverter.getImage(form.expression.data)
         current_problem = Problem(body=form.body.data, expression=form.expression.data,
                                   class_level=form.class_level.data, image=image, author=current_user)
         current_problem.value = TokenCalculator().calculate_task_value(current_problem)
         current_problem.section = form.sections.data
+        print(current_user.tokens, current_problem.value)
         if current_user.tokens >= current_problem.value:
             current_user.tokens -= current_problem.value
             db.session.add(current_problem)
             db.session.commit()
-            flash(f"Задача успешно создана! Она оценина в {current_problem.value} токенов \nУ вас осталось {current_user.tokens}")
-        else:
             flash(
-                f"Задача успешно создана! Она оценина в {current_problem.value} токенов"
-                f"\nУ вас осталось {current_user.tokens}")
+                f"Задача успешно создана! Она оценина в {current_problem.value} токенов \nУ вас осталось {current_user.tokens}")
+        else:
+            flash(f"Стоимость задачи {current_problem.value}")
+            flash(f"У вас не хватает токенов")
+            flash(f"Ваш текущий баланс {current_user.tokens} токенов")
 
     return render_template('problem.html', form=form)
 
@@ -84,3 +99,9 @@ def register():
 @login_required
 def account():
     return render_template('account.html')
+
+
+@app.route('/save')
+def save():
+
+    return redirect('index')

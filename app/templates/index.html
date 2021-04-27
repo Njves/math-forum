@@ -1,26 +1,34 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Index page
+Задачи
 {% endblock %}
 {% block content_title %}
-<p>Index page</p>
+Задачи
 {% endblock %}
 
 {% block content %}
-
-<h1>Hi, {{ current_user.username }}</h1>
-
-
+{% if posts_len <= 0 %}
+Все задачи решенны :(
+{% endif %}
 {% for post in posts %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">
         <a href="#">{{ post.author.username }}</a>
         <h5 class="card-title">{{ post.body }} </h5>
-        <p class="card-text">{{ post.body }}<br/><img src="{{ post.image }}"></p>
+        <p class="card-text">{{ post.body }}</p>
+        <img src="{{ post.image }}"/>
         <div class="badge bg-danger text-wrap" style="width: 6rem;">
             {{ post.value }}
         </div>
+        <form action="" method="POST">
+            <input type="text" name="id" value="{{ post.id }}" readonly/>
+            <textarea name="solve" placeholder="Впишите решение"></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+        <p class="card-text">{{ post.solve }}</p>
+
+
     </div>
 </div>
 

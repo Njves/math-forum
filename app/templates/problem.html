@@ -20,7 +20,6 @@
             {{ form.expression.label }}<br/>
             {{ form.expression(size=32) }}<br/>
         <p><a class="btn btn-outline-dark" href="https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols" target="_blank">Гайд по оформлению выражений </a></p>
-        </p>
 
         <p>
             {{ form.class_level.label }}<br/>
@@ -30,6 +29,7 @@
             {{ form.sections.label }}<br/>
             {{ form.sections() }}
         </p>
+
         <p> {{ form.submit() }} </p>
     </form>
 {% endblock %}

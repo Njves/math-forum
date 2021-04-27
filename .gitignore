@@ -37,6 +37,7 @@ nosetests.xml
 
 venv
 
+
 microblog.log*
 
 .idea
