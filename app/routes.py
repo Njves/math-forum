@@ -24,7 +24,7 @@ def index():
         current_user.tokens += pr.value // 2
         db.session.add(pr)
         db.session.commit()
-
+# ZdarovaLox889
     return render_template("index.html", posts=posts, posts_len=len(posts))
 
 
