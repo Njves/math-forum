@@ -2,7 +2,7 @@
 
 # C extensions
 *.so
-app/static/img
+
 # Packages
 *.egg
 *.egg-info
